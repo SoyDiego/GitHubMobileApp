@@ -1,13 +1,20 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React, {useEffect, useState} from 'react';
-import Layout from '../../components/Layout/Layout';
-import {IconButton, List, Searchbar, Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  IconButton,
+  List,
+  Searchbar,
+  Text,
+} from 'react-native-paper';
 import useGitHubRepository from '../../hooks/useGitHubRepository/useGitHubRepository';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import Profile from '../../components/Profile';
+import Layout from '../../components/Layout/Layout';
 import {useNavigation} from '@react-navigation/native';
 
 const MainScreen = () => {
+  const [searching, setSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const navigation = useNavigation();
@@ -15,35 +22,50 @@ const MainScreen = () => {
     useGitHubRepository(debouncedSearchQuery);
 
   const onChangeSearch = text => {
+    if (text === '') {
+      return;
+    }
+
     setSearchQuery(text);
+    setSearching(text !== '');
   };
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
-    }, 700);
+    }, 1000);
 
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
   if (loading) {
-    return <Text>Loading</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} color="gray" size="large" />
+      </View>
+    );
   }
 
   return (
     <Layout>
       <Searchbar
-        placeholder="Search for a repository: e.g. @facebook"
+        placeholder="Ex: @facebook"
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
 
-      {searchQuery === '' ? (
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator animating={true} color="gray" size="large" />
+        </View>
+      )}
+
+      {searchQuery === '' && !searching ? (
         <View style={styles.containerIconText}>
           <IconButton icon="account-search-outline" size={128} />
           <Text variant="headlineSmall">Search a repository to start...</Text>
         </View>
-      ) : repos.length > 0 ? (
+      ) : !loading && repos.length > 0 ? (
         <>
           <Profile
             url={repository?.avatar_url}
@@ -61,6 +83,7 @@ const MainScreen = () => {
                   title={item.name}
                   description={item.description}
                   left={() => <List.Icon icon="source-repository-multiple" />}
+                  // eslint-disable-next-line react/no-unstable-nested-components
                   right={() => (
                     <View style={styles.rightContainer}>
                       <View style={styles.statContainer}>
@@ -112,6 +135,11 @@ const styles = StyleSheet.create({
   },
   statText: {
     color: 'gray',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

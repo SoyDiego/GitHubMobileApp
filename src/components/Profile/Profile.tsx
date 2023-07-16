@@ -7,7 +7,7 @@ const Profile = ({url, name, description}) => {
     <List.Item
       title={name}
       titleStyle={{fontWeight: 'bold', marginBottom: 8}}
-      description={description.trim()}
+      description={description?.trim()}
       left={() => <Avatar.Image source={{uri: url}} size={96} />}
     />
   );

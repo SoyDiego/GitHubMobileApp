@@ -56,12 +56,6 @@ const MainScreen = () => {
         value={searchQuery}
       />
 
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator animating={true} color="gray" size="large" />
-        </View>
-      )}
-
       {searchQuery === '' && !searching ? (
         <View style={styles.containerIconText}>
           <IconButton icon="account-search-outline" size={128} />

@@ -1,11 +1,12 @@
 import React from 'react';
-import {Appbar} from 'react-native-paper';
+import {Appbar, IconButton} from 'react-native-paper';
 
 const TopBar = () => {
   return (
     <Appbar.Header>
-      <Appbar.BackAction onPress={() => {}} />
-      <Appbar.Content title="Repositories" />
+      <IconButton icon="github" size={32} />
+      {/* <Appbar.BackAction onPress={() => {}} /> */}
+      <Appbar.Content title="GitHub App" />
     </Appbar.Header>
   );
 };

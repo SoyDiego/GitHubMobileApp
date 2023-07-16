@@ -1,12 +1,18 @@
 import React from 'react';
-import {Appbar, IconButton} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 
-const TopBar = () => {
+const TopBar = ({navigation, route}) => {
+  const {name, params} = route;
+  const showBackButton = name !== 'mainStack';
+  const title =
+    name !== 'mainStack' ? `Details: ${params?.repo.name}` : 'GitHub App';
+
   return (
     <Appbar.Header>
-      <IconButton icon="github" size={32} />
-      {/* <Appbar.BackAction onPress={() => {}} /> */}
-      <Appbar.Content title="GitHub App" />
+      {showBackButton && (
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+      )}
+      <Appbar.Content title={title} />
     </Appbar.Header>
   );
 };

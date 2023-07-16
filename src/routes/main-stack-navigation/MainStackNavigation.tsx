@@ -11,7 +11,9 @@ const MainStackNavigation = () => {
   return (
     <Stack.Navigator
       initialRouteName="mainStack"
-      screenOptions={{header: TopBar}}>
+      screenOptions={{
+        header: props => <TopBar {...props} />,
+      }}>
       <Stack.Screen name="mainStack" component={MainScreen} />
       <Stack.Screen name="repoDetails" component={RepoDetailsScreen} />
     </Stack.Navigator>

@@ -3,12 +3,14 @@ import React, {useEffect, useState} from 'react';
 import Layout from '../../components/Layout/Layout';
 import {IconButton, List, Searchbar, Text} from 'react-native-paper';
 import useGitHubRepository from '../../hooks/useGitHubRepository/useGitHubRepository';
-import {FlatList, Image, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import Profile from '../../components/Profile';
+import {useNavigation} from '@react-navigation/native';
 
 const MainScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const navigation = useNavigation();
   const {repository, repos, loading} =
     useGitHubRepository(debouncedSearchQuery);
 
@@ -49,7 +51,7 @@ const MainScreen = () => {
             description={repository?.bio}
           />
           <List.Section>
-            <List.Subheader>Showing {searchQuery}'s Repos</List.Subheader>
+            <List.Subheader>Repositories</List.Subheader>
             <FlatList
               data={repos}
               keyExtractor={item => item.id.toString()}
@@ -73,6 +75,11 @@ const MainScreen = () => {
                       </View>
                     </View>
                   )}
+                  onPress={() => {
+                    navigation.navigate('repoDetails', {
+                      repo: item,
+                    });
+                  }}
                 />
               )}
             />
@@ -93,10 +100,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  imgNotFound: {
-    width: 200,
-    height: 200,
   },
   rightContainer: {
     flexDirection: 'row',

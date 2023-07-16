@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Keyboard, StyleSheet, View} from 'react-native';
 import {
   ActivityIndicator,
   IconButton,
@@ -24,10 +24,6 @@ const MainScreen = () => {
     useGitHubRepository(debouncedSearchQuery);
 
   const onChangeSearch = text => {
-    if (text === '') {
-      return;
-    }
-
     setSearchQuery(text);
     setSearching(text !== '');
   };
@@ -35,6 +31,7 @@ const MainScreen = () => {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
+      Keyboard.dismiss();
     }, 1000);
 
     return () => clearTimeout(delayDebounce);

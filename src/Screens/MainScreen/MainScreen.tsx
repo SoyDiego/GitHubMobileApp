@@ -6,6 +6,7 @@ import {
   List,
   Searchbar,
   Text,
+  useTheme,
 } from 'react-native-paper';
 import useGitHubRepository from '../../hooks/useGitHubRepository/useGitHubRepository';
 import {FlatList} from 'react-native-gesture-handler';
@@ -18,6 +19,7 @@ const MainScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const navigation = useNavigation();
+  const {colors} = useTheme();
   const {repository, repos, loading} =
     useGitHubRepository(debouncedSearchQuery);
 
@@ -40,7 +42,7 @@ const MainScreen = () => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={styles.loadingContainer(colors.surface)}>
         <ActivityIndicator animating={true} color="gray" size="large" />
       </View>
     );
@@ -63,7 +65,7 @@ const MainScreen = () => {
       {searchQuery === '' && !searching ? (
         <View style={styles.containerIconText}>
           <IconButton icon="account-search-outline" size={128} />
-          <Text variant="headlineSmall">Search a repository to start...</Text>
+          <Text variant="headlineSmall">Search a repository...</Text>
         </View>
       ) : !loading && repos.length > 0 ? (
         <>
@@ -136,11 +138,12 @@ const styles = StyleSheet.create({
   statText: {
     color: 'gray',
   },
-  loadingContainer: {
+  loadingContainer: backgroundColor => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+    backgroundColor,
+  }),
 });
 
 export default MainScreen;

@@ -5,7 +5,7 @@ import {useTheme} from 'react-native-paper';
 const Layout = ({children}) => {
   const {colors} = useTheme();
 
-  return <View style={styles.container(colors.background)}>{children}</View>;
+  return <View style={styles.container(colors.surface)}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     gap: 8,
+    backgroundColor,
   }),
 });
 
